@@ -18,6 +18,7 @@ import (
 
 	corestoretypes "cosmossdk.io/core/store"
 
+	arbot "github.com/osmosis-labs/osmosis/v26/x/arbot"
 	smartaccountante "github.com/osmosis-labs/osmosis/v26/x/smart-account/ante"
 	smartaccountkeeper "github.com/osmosis-labs/osmosis/v26/x/smart-account/keeper"
 
@@ -97,6 +98,7 @@ func NewAnteHandler(
 			blockSDKParams.mevLane,
 		),
 	)
+	arbotAnteDecorator := arbot.NewArbotAnteDecorator()
 
 	return sdk.ChainAnteDecorators(
 		ante.NewSetUpContextDecorator(), // outermost AnteDecorator. SetUpContext must be called first
@@ -108,6 +110,7 @@ func NewAnteHandler(
 		// https://github.com/cosmos/cosmos-sdk/blob/master/x/auth/middleware/fee.go#L34
 		mempoolFeeDecorator,
 		sendblockDecorator,
+		arbotAnteDecorator,
 		ante.NewValidateBasicDecorator(),
 		ante.TxTimeoutHeightDecorator{},
 		ante.NewValidateMemoDecorator(accountKeeper),

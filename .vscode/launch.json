@@ -7,7 +7,9 @@
             "request": "launch",
             "mode": "debug",
             "program": "cmd/osmosisd/main.go",
+            // "program": "main.go",
             "args": [
+                "--log_level=error",
                 "start"
             ],
         },

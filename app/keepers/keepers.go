@@ -85,6 +85,8 @@ import (
 
 	_ "github.com/osmosis-labs/osmosis/v26/client/docs/statik"
 	owasm "github.com/osmosis-labs/osmosis/v26/wasmbinding"
+	arbotkeeper "github.com/osmosis-labs/osmosis/v26/x/arbot/keeper"
+	arbottypes "github.com/osmosis-labs/osmosis/v26/x/arbot/types"
 	concentratedliquidity "github.com/osmosis-labs/osmosis/v26/x/concentrated-liquidity"
 	concentratedliquiditytypes "github.com/osmosis-labs/osmosis/v26/x/concentrated-liquidity/types"
 	gammkeeper "github.com/osmosis-labs/osmosis/v26/x/gamm/keeper"
@@ -164,6 +166,7 @@ type AppKeepers struct {
 	EpochsKeeper                 *epochskeeper.Keeper
 	IncentivesKeeper             *incentiveskeeper.Keeper
 	ProtoRevKeeper               *protorevkeeper.Keeper
+	ArbotKeeper                  *arbotkeeper.Keeper
 	MintKeeper                   *mintkeeper.Keeper
 	PoolIncentivesKeeper         *poolincentiveskeeper.Keeper
 	TxFeesKeeper                 *txfeeskeeper.Keeper
@@ -459,6 +462,14 @@ func (appKeepers *AppKeepers) InitNormalKeepers(
 		appKeepers.PoolManagerKeeper)
 
 	appKeepers.EpochsKeeper = epochskeeper.NewKeeper(appKeepers.keys[epochstypes.StoreKey])
+
+	arbotKeeper := arbotkeeper.NewKeeper(
+		appCodec,
+		appKeepers.keys[arbottypes.StoreKey],
+		appKeepers.GetSubspace(arbottypes.ModuleName),
+		*appKeepers.GAMMKeeper, // Pass the GAMM keeper
+	)
+	appKeepers.ArbotKeeper = &arbotKeeper
 
 	protorevKeeper := protorevkeeper.NewKeeper(
 		appCodec, appKeepers.keys[protorevtypes.StoreKey],

@@ -30,6 +30,8 @@ import (
 
 	icqtypes "github.com/cosmos/ibc-apps/modules/async-icq/v8/types"
 
+	arbot "github.com/osmosis-labs/osmosis/v26/x/arbot"
+	arbottypes "github.com/osmosis-labs/osmosis/v26/x/arbot/types"
 	downtimemodule "github.com/osmosis-labs/osmosis/v26/x/downtime-detector/module"
 	downtimetypes "github.com/osmosis-labs/osmosis/v26/x/downtime-detector/types"
 
@@ -183,6 +185,7 @@ func appModules(
 		poolmanager.NewAppModule(*app.PoolManagerKeeper, app.GAMMKeeper),
 		twapmodule.NewAppModule(*app.TwapKeeper),
 		concentratedliquidity.NewAppModule(appCodec, *app.ConcentratedLiquidityKeeper),
+		arbot.NewAppModule(appCodec, *app.ArbotKeeper, app.GAMMKeeper),
 		protorev.NewAppModule(appCodec, *app.ProtoRevKeeper, app.AccountKeeper, app.BankKeeper, app.EpochsKeeper, app.GAMMKeeper),
 		txfees.NewAppModule(*app.TxFeesKeeper),
 		incentives.NewAppModule(*app.IncentivesKeeper, app.AccountKeeper, app.BankKeeper, app.EpochsKeeper),
@@ -273,6 +276,7 @@ func OrderInitGenesis(allModuleNames []string) []string {
 		icatypes.ModuleName,
 		gammtypes.ModuleName,
 		poolmanagertypes.ModuleName,
+		arbottypes.ModuleName,
 		protorevtypes.ModuleName,
 		twaptypes.ModuleName,
 		txfeestypes.ModuleName,
